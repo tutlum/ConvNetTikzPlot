@@ -1,0 +1,23 @@
+\documentclass[paper=a4,12pt,version=last,landscape]{scrartcl}
+\usepackage[svgnames]{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\usepackage{latexsym}
+\usepackage{amsmath, amssymb, MnSymbol}
+\usetikzlibrary{calc,decorations,decorations.text}
+\usepackage{ifthen}
+
+
+\input{conv_net_commands}
+
+
+\begin{document}
+\pagestyle{empty}
+{\rule{0pt}{0pt}}\vfill
+\resizebox{\textwidth}{!}{\input{conv_net}}
+\vfill
+\end{document}

@@ -1,0 +1,62 @@
+
+%\input{conv_net_commands}
+
+\begin{tikzpicture}[scale=0.4]
+
+	
+	\defaulNetValues
+	
+	% -- Input
+	\inputL{3}{3}{}{-1}%{\includegraphics[width=3em,height=3em]{/homes/sschleef/masterarbeit/masterthesis/ik/2019/overleaf/plots/auto.png}}
+	
+	% -- Layers 1
+	\layer{3}{3}{4}{-2}{-0.5}
+	
+	% -- Conv connection
+	\def\firstLayer{0}
+	\convCon{0.8}{0.8}{0.2}{0.2}{3}{0.7}{0.7}
+	
+	% -- Layers 2
+	\layer{2}{2}{4}{0}{}
+	
+	% -- Conv connection
+	\convCon{0.8}{0.8}{0.2}{0.2}{3}{0.7}{2.3}
+	
+	% -- Layers 3
+	\layer{2}{2}{2}{-1}{}
+	
+	%-- maxpool
+	\maxPool{0.6}{0.6}{0.6}{0.6}{1.5}{0.5}
+	
+	%%%%%%%%%%%%%%%%%%
+	% -- Layers 4
+	\layer{1}{1}{2}{-2}{0.5}
+	
+	% -- Conv connection
+	\convCon{0.8}{0.8}{0.2}{0.2}{3}{0.7}{1.4}
+	%%%%%%%%%%%%%%%%%%
+	
+	% -- Vector
+	\vectorL{0.2}{6}{-4}{+1}
+	
+	
+	% -- Flatten connection
+	%\flattenL{0.8}{0.8}{1.3}{1.5}{0.2}
+	\flattenL{0.4}{0.4}{0.7}{0.3}{0.2}
+	
+	% -- Vector
+	\vectorL{0.2}{4}{-3}{+1}
+	
+	% -- Dense
+	%\denseL{0.75}{0}{4}{0}{2}
+	\denseL{0.75}{5}{8}{6}{8}
+	
+	% -- Vector
+	\vectorL{0.2}{1.6}{-3}{+1}
+	
+	% -- Dense
+	%\denseL{1}{2}{4}{2}{4}
+	\denseL{1}{0}{2}{0}{2}
+	
+	
+\end{tikzpicture}

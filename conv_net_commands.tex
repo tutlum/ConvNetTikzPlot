@@ -1,0 +1,146 @@
+
+\definecolor{unibi-gruen}{rgb}{0.00, 0.45, 0.33}%[0, 114.75, 84.15]
+\definecolor{unibi-hellgruen}{rgb}{0.71, 0.78, 0.15}%[181.04999999999998, 198.9, 38.25]
+\definecolor{citec-orange}{rgb}{0.98, 0.58, 0.2}%[249.9, 147.89999999999998, 51.0]
+
+\definecolor{gray90}{HTML}{202020}
+\definecolor{gray70}{HTML}{606060}
+\definecolor{gray80}{HTML}{404040}
+\definecolor{gray3}{HTML}{FAFAFA}	
+
+	\newcommand{\inputL}[4]{
+		\def\height{#1};
+		\def\width{#2};
+		\def\of{\initdist};
+		\def\hof{#4};
+		\draw [line width=\linewidthRec,fill=\colF,fill opacity=\opacity, draw=\colFl]
+				(\of,\hof) rectangle (\of+\width,\hof+\height);	
+		\node[inner sep=0pt,outer sep=0pt,opacity=0.3] at (\of+\width/2,\hof++\width/2) {#3};
+		\edef\oheight{\height};\edef\owidth{\width};
+	}
+	
+	\newcommand{\layer}[5]{
+		\def\height{#1};
+		\def\width{#2};
+		\edef\pnr{\nr};
+		\def\nr{#3};
+		\edef\ofcorr{#4};
+		\edef\phof{\hof};\edef\hof{\nr*\verS+#5};
+		\edef\of{\of+\dist+\ofcorr};
+		\foreach \l in {0,...,\nr} {
+			\draw [line width=\linewidthRec,fill=\colF,fill opacity=\opacity, draw=\colFl]
+				(\of+\l*2*\verS,\hof-\l*2*\verS) rectangle (\of+\width+\l*2*\verS,\hof+\height-\l*2*\verS);
+			\draw [line width=\linewidthRec,fill=\colL,fill opacity=\opacity, draw=\colLl]
+				(\of+\l*2*\verS+\verS,\hof-\l*2*\verS-\verS) rectangle (\of+\width+\l*2*\verS+\verS,\hof+\height-\l*2*\verS-\verS);
+		}
+	}
+	\newcommand{\convCon}[7]{
+		\def\hB{#1};\def\wB{#2};
+		\def\hS{#3};\def\wS{#4};
+		\def\fsize{#5}
+		\def\xv{#6};\def\yv{#7}
+		%StartLeftBig; StartBottomBig
+		\def\hfrac{\height/\oheight};\def\wfrac{\width/\owidth};
+		\def\sLB{\of-\ofcorr-\dist+2*\pnr*\verS+\firstLayer*\verS+\xv-\wB/2};\def\sBB{\phof-2*\pnr*\verS-\firstLayer*\verS+\yv-\hB/2}
+		\def\sLS{\of+2*\nr*\verS+\verS+\wfrac*\xv-\wS/2};\def\sBS{\hof-2*\nr*\verS-\verS+\hfrac*\yv-\hS/2}
+		\draw [line width=\linewidthRec,fill=white,fill opacity=\convopacity, draw=\colCl]
+			(\sLB,\sBB) rectangle (\sLB+\wB,\sBB+\hB);
+		\draw [line width=\linewidthRec,fill=white,fill opacity=\convopacity, draw=\colCl]
+			(\sLS,\sBS) rectangle (\sLS+\wS,\sBS+\hS);
+		\ifthenelse{\fsize>0}{\foreach \fx in {0,...,\fsize}{
+				\draw[\colCl,line width=\linewidthCon,draw opacity=\gridopacity] (\sLB+\fx*\wB/\fsize,\sBB)--(\sLB+\fx*\wB/\fsize,\sBB+\hB);
+				\draw[\colCl,line width=\linewidthCon,draw opacity=\gridopacity] (\sLB,\sBB+\fx*\wB/\fsize)--(\sLB+\wB,\sBB+\fx*\hB/\fsize);
+			}}{};
+		\draw[\colCl,line width=\linewidthCon] (\sLB+\wB,\sBB)--(\sLS,\sBS);
+		\draw[\colCl,line width=\linewidthCon] (\sLB+\wB,\sBB+\hB)--(\sLS,\sBS+\hS);
+		\edef\oheight{\height};\edef\owidth{\width};
+		\edef\pnr{\nr};
+		\def\firstLayer{1} %Important for upcoming conv layers!
+	}
+	
+	\newcommand{\maxPool}[6]{
+		\def\hB{#1};\def\wB{#2};
+		\def\hS{#3};\def\wS{#4};
+		\def\xv{#5};\def\yv{#6}
+		%StartLeftBig; StartBottomBig
+		\def\hfrac{\height/\oheight};\def\wfrac{\width/\owidth};
+		\def\sLB{\of-\ofcorr-\dist+2*\pnr*\verS+\verS+\xv-\wB/2};\def\sBB{\phof-2*\pnr*\verS-\verS+\yv-\hB/2}
+		\def\sLS{\of+2*\nr*\verS+\verS+\wfrac*\xv-\wS/2};\def\sBS{\hof-2*\nr*\verS-\verS+\hfrac*\yv-\hS/2}
+		\edef\sLB{\sLB-\verS};\edef\sBB{\sBB+\verS}
+			\draw [line width=\linewidthRec,fill=white,fill opacity=0.4*\convopacity, draw=\colCl,draw opacity=0.4]
+				(\sLB,\sBB) rectangle (\sLB+\wB,\sBB+\hB);
+			%\draw[\colCl,line width=\linewidthCon] (\sLB+\wB,\sBB)--(\sLS,\sBS);
+			\draw[\colCl,line width=\linewidthCon] (\sLB+\wB,\sBB+\hB)--(\sLS,\sBS+\hS);
+	
+		\edef\sLB{\sLB+\verS};\edef\sBB{\sBB-\verS}
+			\draw [line width=\linewidthRec,fill=white,fill opacity=\convopacity, draw=\colCl]
+				(\sLB,\sBB) rectangle (\sLB+\wB,\sBB+\hB);
+			\draw [line width=\linewidthRec,fill=white,fill opacity=\convopacity, draw=\colCl]
+				(\sLS,\sBS) rectangle (\sLS+\wS,\sBS+\hS);
+			\draw[\colCl,line width=\linewidthCon] (\sLB+\wB,\sBB)--(\sLS,\sBS);
+			%\draw[\colCl,line width=\linewidthCon] (\sLB+\wB,\sBB+\hB)--(\sLS,\sBS+\hS);
+		\edef\oheight{\height};\edef\owidth{\width};
+		\edef\pnr{\nr};
+	}
+	
+	\newcommand{\vectorL}[4]{
+		\def\vecW{#1};\def\vecH{#2};
+		\def\ofcorr{#3}
+		\edef\of{\of+\dist+\ofcorr};
+		\edef\phof{\hof};\edef\hof{\vecH/2+#4};
+		%\def\hof{2.0};
+		\filldraw [\colFl,line width=\linewidthRec, fill=\colF,fill opacity=\opacity, even odd rule]
+		(\of,\hof) -- ++(\vecW,0) -- ++(\vecH,-\vecH) -- ++(-\vecW,0) -- cycle;
+	}
+	
+	\newcommand{\flattenL}[5]{
+		\def\hB{#1};\def\wB{#2};
+		\def\xv{#3};\def\yv{#4};
+		\def\fv{1.3*\xv*\yv/\height/\width};
+		\def\hS{1.3*\hB*\wB/\height/\width};\def\wS{#5};
+		%\def\hS{0.2};
+		%StartLeftBig; StartBottomBig 
+		%\def\sLB{\of-\dist+5.2};\def\sBB{-1.3}
+		\def\sLB{\of-\ofcorr-\dist+2*\pnr*\verS+\verS+\xv-\wB/2};\def\sBB{\phof-2*\pnr*\verS-\verS+\yv-\hB/2}
+		%LeftSmall; BottomSmall
+		\def\sLS{\of};\def\sBS{\hof}%+3.0-2.0
+		\draw [line width=\linewidthRec,fill=white,fill opacity=\convopacity, draw=\colCl]
+			(\sLB,\sBB) rectangle (\sLB+\wB,\sBB+\hB);
+		\filldraw [\colCl,line width=\linewidthRec, fill=white,fill opacity=\convopacity, even odd rule]
+		(\sLS+\fv*\vecH,\sBS-\fv*\vecH) -- ++(\vecW,0) -- ++(\vecH*\hS,-\vecH*\hS) -- ++(-\vecW,0) -- cycle;
+		\draw[\colCl,line width=\linewidthCon] (\sLB+\wB,\sBB)--(\sLS+\vecH*\hS+\fv*\vecH,\sBS-\vecH*\hS-\fv*\vecH);
+		\draw[\colCl,line width=\linewidthCon] (\sLB+\wB,\sBB+\hB)--(\sLS+\fv*\vecH,\sBS-\fv*\vecH);	
+		\edef\ovecH{\vecH};
+	}
+	
+	\newcommand{\denseL}[5]{
+		\def\stepsize{#1}
+		\def\fracti{\vecH/\ovecH}
+		\foreach \dce in {#2,...,#3} {
+			\foreach \dcz in {#4,...,#5} {
+				\draw[\colCl,line width=\linewidthDen]
+					({\of-\dist-\ofcorr+\vecW+\dce*\stepsize},{\phof-\dce*\stepsize})
+					--({\of+\dcz*\fracti*\stepsize},{\hof-\dcz*\fracti*\stepsize});
+			}
+		};\edef\ovecH{\vecH};
+	}
+	
+\newcommand{\defaulNetValues}{
+
+	\def\linewidthRec{0.3pt};
+	\def\linewidthCon{0.3pt};
+	\def\linewidthDen{0.15pt};
+	\def\colF{citec-orange};
+	\def\colL{unibi-gruen};
+	\def\colFl{gray90}%{citec-orange};%{black};%
+	\def\colLl{gray90}%{black};%{unibi-gruen};
+	\def\colCl{gray90};%{gray};%
+	\def\opacity{.6}
+	\def\gridopacity{0.2}
+	\def\convopacity{.6}
+	\def\verS{0.3}
+	\def\dist{6}
+	\def\initdist{0}
+	\def\nr{0}
+	\def\firstLayer{0}
+}
